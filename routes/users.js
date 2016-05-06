@@ -1,6 +1,5 @@
 var express = require('express');
 var router = express.Router();
-var _ = require('lodash');
 var passport = require('passport');
 
 /* GET users listing. */
@@ -19,8 +18,7 @@ router.post('/login', passport.authenticate('local-login', {
   successRedirect : '/', // redirect to the secure profile section
   failureRedirect : '/users/login', // redirect back to the signup page if there is an error
   failureFlash : true // allow flash messages
-}))
-console.log("HERHEHRHE");;
+}));
 
 /* GET Signup page */
 router.get('/signup', function(req, res) {

@@ -7,7 +7,8 @@
 var app = require('../app');
 var debug = require('debug')('YoBro:server');
 var http = require('http');
-
+var CronJob = require('cron').CronJob;
+var contentRequests = require('../modules/content-requests');
 /**
  * Get port from environment and store in Express.
  */
@@ -87,4 +88,13 @@ function onListening() {
     ? 'pipe ' + addr
     : 'port ' + addr.port;
   debug('Listening on ' + bind);
+
+  // start collecting content suggestions (performed every day at midnight)
+  var job = new CronJob(
+      '00 00 * * * *',
+      contentRequests.populateNewContent,
+      null,
+      true, /* Start the job right now */
+      'America/Los_Angeles' /* Time zone of this job. */
+  );
 }
