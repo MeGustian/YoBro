@@ -7,15 +7,7 @@ var userSchema = mongoose.Schema({
 
     local            : {
         username     : String,
-        password     : String,
-        preferences  : JSON,
-        twitterInfo  : JSON
-    },
-    facebook         : {
-        id           : String,
-        token        : String,
-        email        : String,
-        name         : String
+        password     : String
     },
     twitter          : {
         id           : String,
@@ -23,12 +15,12 @@ var userSchema = mongoose.Schema({
         displayName  : String,
         username     : String
     },
-    google           : {
-        id           : String,
-        token        : String,
-        email        : String,
-        name         : String
-    }
+    userDecisions    : {
+        time         : Number,
+        contentVibe  : String
+    },
+    seenContent      : Array,
+    tagPool          : Object
 
 });
 
