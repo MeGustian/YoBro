@@ -19,8 +19,7 @@ router.post('/login', passport.authenticate('local-login', {
   successRedirect : '/', // redirect to the secure profile section
   failureRedirect : '/users/login', // redirect back to the signup page if there is an error
   failureFlash : true // allow flash messages
-}))
-console.log("HERHEHRHE");;
+}));
 
 /* GET Signup page */
 router.get('/signup', function(req, res) {
@@ -38,3 +37,17 @@ router.post('/signup', passport.authenticate('local-signup', {
 }));
 
 module.exports = router;
+
+
+// ================================= TWITTER LOGIN ==================================================
+router.get('/auth/twitter',
+    passport.authenticate('twitter'));
+
+router.get('/auth/twitter/callback',
+    passport.authenticate('twitter', {
+      successRedirect : '/',
+      failureRedirect: '/users/login' }),
+    function(req, res) {
+      // Successful authentication, redirect home.
+      res.redirect('/');
+    });
