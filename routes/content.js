@@ -7,9 +7,9 @@ router.get('/all', function(req, res, next) {
     ContentSuggestions.find({}).exec(function(err, data) {
         if (err) console.log('error finding content');
         else contentSuggestions = data;
+        
+        res.render('all_content', { contentSuggestions: contentSuggestions });
     });
-    
-    res.render('all_content', { contentSuggestions: contentSuggestions });
 });
 
 module.exports = router;

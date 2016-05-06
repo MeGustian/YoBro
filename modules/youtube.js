@@ -24,26 +24,16 @@ var convertToContentSuggestion = function(content, query) {
 module.exports = {
 
     search: function (query) {
-        return new Promise(function(resolve, reject) {
-            // TODO: reformat to array according to our JSON model
+        return new Promise(function (resolve, reject) {
             youTube.search(query, 50, function (error, data) {
                 if (error) reject(error);
                 else {
-                    var result = data.items.map(function(entry) {
+                    var result = data.items.map(function (entry) {
                         return convertToContentSuggestion(entry, query);
                     });
 
                     resolve(result);
                 }
-            });
-        });
-    },
-
-    getById: function(videoId) {
-        return new Promise(function(resolve, reject) {
-            youTube.getById(videoId, function (error, result) {
-                if (error) reject(error);
-                else resolve(result);
             });
         });
     }

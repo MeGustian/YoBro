@@ -6,7 +6,7 @@ var hn = require('hacker-news-api');
 var convertToContentSuggestion = function(content, query) {
     return {
         title: content.title,
-        contentType: "video",
+        contentType: "news",
         contentVibe: "funny", // TODO: make dynamic
         duration: 10, //content.contentDetails.duration, // TODO: fix this
         provider: Provider.findOne({name: 'HackerNews'}).id,
@@ -21,7 +21,6 @@ module.exports = {
 
     search: function(query) {
         return new Promise(function(resolve, reject) {
-            // TODO: reformat to array according to our JSON model
             hn.story().search(query).since('past_24h', function (error, data) {
                 if (error) reject(error);
                 else {
@@ -31,15 +30,6 @@ module.exports = {
 
                     resolve(result);
                 }
-            });
-        });
-    },
-
-    getById: function(id) {
-        return new Promise(function(resolve, reject) {
-            hn.story().item(id, function (error, data) {
-                if (error) reject(error);
-                else resolve(data);
             });
         });
     }

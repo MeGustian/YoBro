@@ -35,7 +35,6 @@ module.exports = {
 
         Promise.all([funnyContent, newsContent, learningContent]).then(function (dataArr) {
             var data = _.flatten(dataArr);
-            console.log(data);
 
             // add to content collection
             var counter = 0;
@@ -46,7 +45,6 @@ module.exports = {
                     }
                     else {
                         counter++;
-                        console.log("created successfully");
                     }
 
                     // on last iteration, print how many documents were stored
