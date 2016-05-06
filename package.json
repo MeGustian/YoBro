@@ -7,13 +7,10 @@
   },
   "dependencies": {
     "body-parser": "^1.4.3",
-    "express": "*",
     "immutable": "*",
-    "jade": "*",
     "lodash": "^3.10.1",
     "nib": "*",
     "normalize.css": "*",
-    "promise": "*",
     "react": "*",
     "react-bootstrap": "^0.25.2",
     "react-immutable-proptypes": "^1.2.0",
@@ -25,9 +22,6 @@
     "stylus": "*",
     "superagent-promise": "^1.0.3",
     "cookie-parser": "~1.3.5",
-    "debug": "*",
-    "morgan": "*",
-    "serve-favicon": "*",
     "mongodb": "^1.4.38",
     "monk": "*",
     "mongoose" : "~3.8.1",
@@ -42,5 +36,13 @@
     "bcrypt-nodejs" : "latest",
     "method-override": "~1.0.0",
     "express-session": "~1.0.0"
+    "debug": "~2.2.0",
+    "express": "~4.13.1",
+    "hacker-news-api": "^2.0.0",
+    "jade": "~1.11.0",
+    "morgan": "~1.6.1",
+    "serve-favicon": "~2.3.0",
+    "underscore": "^1.8.3",
+    "youtube-node": "^1.3.0"
   }
 }
