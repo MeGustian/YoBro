@@ -3,48 +3,58 @@ var _ = require('underscore');
 var ContentSuggestion = require('../models/contentSuggestions');
 var Provider = require('../models/providers');
 
-var youtube = require('./youtube');
 var hackernews = require('./hackernews');
- 
+var youtube = require('./youtube');
+
 
 var requestNewContent = function(searchQuery) {
-    var youtubeContent = youtube.search(searchQuery);
-    var hackernewsContent = hackernews.search(searchQuery);
-    
-    return _.union(youtubeContent, hackernewsContent);
+    return new Promise(function(resolve, reject) {
+        var youtubeContent = youtube.search(searchQuery);
+        var hackernewsContent = hackernews.search(searchQuery);
+
+        Promise.all([youtubeContent, hackernewsContent]).then(function(dataArr) {
+            var content = _.flatten(dataArr);
+
+            if (content.length > 0) {
+                resolve(content);
+            }
+            else {
+                reject(Error("requestNewContent failed."));
+            }
+        });
+    });
 };
 
 
-module.exports = function() {
-    var populateNewContent = function() {
+module.exports = {
+
+    populateNewContent: function() {
         var funnyContent = requestNewContent('funny');
         var newsContent = requestNewContent('new');
         var learningContent = requestNewContent('tutorial');
-        var contentArray = _.union(funnyContent, newsContent, learningContent);
 
-        // add to content collection
-        ContentSuggestion.collection.insert(contentArray, function(err, data) {
-           if (err) {
-               console.log("error inserting content suggestions:\n" + err);
-           }
-           else {
-               console.info('%d content suggestions successfully stored.', data.length);
-           }
-        });
-    };
+        Promise.all([funnyContent, newsContent, learningContent]).then(function (dataArr) {
+            var data = _.flatten(dataArr);
+            console.log(data);
 
-    // returns 5 content suggestions from model based on duration and Vibe
-    var getContentSuggestion = function(duration, contentVibe) {
-        ContentSuggestion
-            .find({duration: duration, contentVibe: contentVibe})
-            .limit(5)
-            .exec(function(err, contentSuggestions) {
-                if (err) {
-                    console.log(err);
-                }
-                else {
-                    return contentSuggestions;
-                }
+            // add to content collection
+            var counter = 0;
+            data.forEach(function(content, index) {
+                ContentSuggestion.create(content, function(err) {
+                    if (err) {
+                        console.log("error inserting content suggestion: " + err);
+                    }
+                    else {
+                        counter++;
+                        console.log("created successfully");
+                    }
+
+                    // on last iteration, print how many documents were stored
+                    if (index == data.length -1) {
+                        console.log('%d content suggestions successfully stored.', counter);
+                    }
+                });
             });
+        });
     }
 };

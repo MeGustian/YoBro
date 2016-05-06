@@ -1,6 +1,6 @@
 var mongoose = require('mongoose');
 
-var userSchema = mongoose.Schema({
+var contentSuggestionSchema = mongoose.Schema({
     title: String,
     contentType: String,
     contentVibe: String,
@@ -9,7 +9,10 @@ var userSchema = mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Provider'
     },
-    previewImg: String
+    previewImg: String,
+    tags: Array,
+    url: String,
+    publishedAt: Date
 });
 
-module.exports = mongoose.model('ContentSuggestion', userSchema);
+module.exports = mongoose.model('ContentSuggestion', contentSuggestionSchema);

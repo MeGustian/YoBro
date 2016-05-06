@@ -1,9 +1,9 @@
 var mongoose = require('mongoose');
 
-var userSchema = mongoose.Schema({
+var providerSchema = mongoose.Schema({
     name: String,
     baseUrl: String,
     logoImg: String
 });
 
-module.exports = mongoose.model('Provider', userSchema);
+module.exports = mongoose.model('Provider', providerSchema);
