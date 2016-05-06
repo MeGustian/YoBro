@@ -11,14 +11,14 @@ var convertToContentSuggestion = function(content, query) {
     return {
         title: content.snippet.title,
         contentType: "video",
-        contentVibe: "funny", // TODO: make dynamic
-        duration: 10, //content.contentDetails.duration, // TODO: fix this
+        contentVibe: ["funny", "news", "learning"][Math.floor(Math.random() * 2)], // TODO: make dynamic
+        duration: Math.floor((Math.random() * 15) + 1), //content.contentDetails.duration, // TODO: fix this
         provider: Provider.findOne({name: 'YouTube'}).id,
         previewImg: content.snippet.thumbnails.default.url,
         tags: content.snippet.tags, // TODO: fix this
         url: 'https://www.youtube.com/watch?v=' + content.id.videoId,
         publishedAt: content.snippet.publishedAt
-    }
+    };
 };
 
 module.exports = {

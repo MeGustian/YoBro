@@ -7,14 +7,14 @@ var convertToContentSuggestion = function(content, query) {
     return {
         title: content.title,
         contentType: "news",
-        contentVibe: "funny", // TODO: make dynamic
-        duration: 10, //content.contentDetails.duration, // TODO: fix this
+        contentVibe: ["funny", "news", "learning"][Math.floor(Math.random() * 2)], // TODO: make dynamic
+        duration: Math.floor((Math.random() * 15) + 1), //content.contentDetails.duration, // TODO: fix this
         provider: Provider.findOne({name: 'HackerNews'}).id,
         previewImg: 'https://i.ytimg.com/vi/tntOCGkgt98/maxresdefault.jpg', // TODO: fix this
         tags: content.tags,
         url: content.url,
         publishedAt: content.createdAt
-    }
+    };
 };
 
 module.exports = {
