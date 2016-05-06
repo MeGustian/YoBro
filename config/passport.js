@@ -2,6 +2,7 @@
 // load all the things we need
 var LocalStrategy   = require('passport-local').Strategy;
 var FacebookStrategy = require('passport-facebook').Strategy;
+var TwitterStrategy = require('passport-twitter').Strategy;
 // load up the user model
 var User = require('../models/users');
 
@@ -170,5 +171,20 @@ module.exports = function(passport) {
 
         }));
 
+    // =========================================================================
+    // TWITTER ================================================================
+    // =========================================================================
+
+    passport.use(new TwitterStrategy({
+            consumerKey: configAuth.twitterAuth.consumerKey,
+            consumerSecret: configAuth.twitterAuth.consumerSecret,
+            callbackURL: configAuth.twitterAuth.callbackURL
+        },
+        function(token, tokenSecret, profile, cb) {
+            User.findOrCreate({ twitterId: profile.id }, function (err, user) {
+                return cb(err, user);
+            });
+        }
+    ));
 };
 
