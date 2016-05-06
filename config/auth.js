@@ -9,7 +9,7 @@ module.exports = {
     'twitterAuth' : {
         'consumerKey'       : 'dcWPi8afvm68EhltGjP5djhsN',
         'consumerSecret'    : '7OJJRgF2qUpMbLrpT8byGrULieCQ2RCdtZF1HsfG3V4xAJDAyb',
-        'callbackURL'       : 'http://localhost:8080/auth/twitter/callback'
+        'callbackURL'       : 'https://glacial-lake-45207.herokuapp.com/auth/twitter/callback'
     },
 
     'googleAuth' : {
