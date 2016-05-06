@@ -1,6 +1,5 @@
 var express = require('express');
 var router = express.Router();
-var _ = require('lodash');
 var passport = require('passport');
 
 /* GET users listing. */

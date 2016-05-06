@@ -1,6 +1,3 @@
-/**
- * Created by Samsung on 06/05/2016.
- */
 // load the things we need
 var mongoose = require('mongoose');
 var bcrypt   = require('bcrypt-nodejs');

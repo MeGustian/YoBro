@@ -1,7 +1,11 @@
 var _ = require('underscore');
-var youtube = require('modules/youtube');
-var hackernews = require('modules/hackernews');
 
+var ContentSuggestion = require('../models/contentSuggestions');
+var Provider = require('../models/providers');
+
+var youtube = require('./youtube');
+var hackernews = require('./hackernews');
+ 
 
 var requestNewContent = function(searchQuery) {
     var youtubeContent = youtube.search(searchQuery);
@@ -16,12 +20,31 @@ module.exports = function() {
         var funnyContent = requestNewContent('funny');
         var newsContent = requestNewContent('new');
         var learningContent = requestNewContent('tutorial');
-        // TODO: add to content collection
+        var contentArray = _.union(funnyContent, newsContent, learningContent);
+
+        // add to content collection
+        ContentSuggestion.collection.insert(contentArray, function(err, data) {
+           if (err) {
+               console.log("error inserting content suggestions:\n" + err);
+           }
+           else {
+               console.info('%d content suggestions successfully stored.', data.length);
+           }
+        });
     };
 
+    // returns 5 content suggestions from model based on duration and Vibe
     var getContentSuggestion = function(duration, contentVibe) {
-        // TODO: get 5 content suggestions from model based on duration and
-        // Vibe
-
+        ContentSuggestion
+            .find({duration: duration, contentVibe: contentVibe})
+            .limit(5)
+            .exec(function(err, contentSuggestions) {
+                if (err) {
+                    console.log(err);
+                }
+                else {
+                    return contentSuggestions;
+                }
+            });
     }
 };
