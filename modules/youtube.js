@@ -1,33 +1,50 @@
+var _ = require('underscore');
+var Provider = require('../models/providers');
 var YouTube = require('youtube-node');
 
 var youTube = new YouTube();
-youTube.setKey('API_KEY'); // TODO: add API key
+youTube.setKey('AIzaSyAdmw53NwaktnXINZPXg4w05JKwgF6D8uE');
+youTube.addParam('part', 'snippet,contentDetails');
 
-module.exports = function() {
+// returns an object compatible with ContentSuggenstion model
+var convertToContentSuggestion = function(content, query) {
+    return {
+        title: content.snippet.title,
+        contentType: "video",
+        contentVibe: "funny", // TODO: make dynamic
+        duration: 10, //content.contentDetails.duration, // TODO: fix this
+        provider: Provider.findOne({name: 'YouTube'}).id,
+        previewImg: content.snippet.thumbnails.default.url,
+        tags: content.snippet.tags, // TODO: fix this
+        url: 'https://www.youtube.com/watch?v=' + content.id.videoId,
+        publishedAt: content.snippet.publishedAt
+    }
+};
 
-    var search = function (query) {
-        youTube.search(query, 200, function (error, result) {
-            if (error) {
-                console.log(error);
-                return null;
-            }
-            else {
-                // TODO: reformat to array according to our JSON model
-                return result;
-            }
+module.exports = {
+
+    search: function (query) {
+        return new Promise(function(resolve, reject) {
+            // TODO: reformat to array according to our JSON model
+            youTube.search(query, 50, function (error, data) {
+                if (error) reject(error);
+                else {
+                    var result = data.items.map(function(entry) {
+                        return convertToContentSuggestion(entry, query);
+                    });
+
+                    resolve(result);
+                }
+            });
         });
-    };
+    },
 
-    var getById = function(videoId) {
-        youTube.getById(videoId, function(error, result) {
-            if (error) {
-                console.log(error);
-                return null;
-            }
-            else {
-                // TODO: reformat to array according to our JSON model
-                return result;
-            }
+    getById: function(videoId) {
+        return new Promise(function(resolve, reject) {
+            youTube.getById(videoId, function (error, result) {
+                if (error) reject(error);
+                else resolve(result);
+            });
         });
     }
 };
