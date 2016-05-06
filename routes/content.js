@@ -13,3 +13,7 @@ router.get('/all', function(req, res, next) {
 });
 
 module.exports = router;
+
+router.get('/decision', function(req, res, next){
+    var content = ContentSuggestions.find
+})
