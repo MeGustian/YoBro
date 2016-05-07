@@ -20,7 +20,7 @@ var userSchema = mongoose.Schema({
         contentVibe  : String
     },
     seenContent      : Array,
-    tagPool          : Array
+    tagpool          : Object
 
 });
 
