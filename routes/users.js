@@ -14,8 +14,15 @@ router.get('/login', function(req, res) {
   res.render('login');
 });
 
+router.get('/home', function(req, res) {
+
+    // render the page and pass in any flash data if it exists
+    //res.render('login', { message: req.flash('loginMessage') });
+    res.render('home');
+});
+
 router.post('/login', passport.authenticate('local-login', {
-  successRedirect : '/', // redirect to the secure profile section
+  successRedirect : '/home', // redirect to the secure profile section
   failureRedirect : '/users/login', // redirect back to the signup page if there is an error
   failureFlash : true // allow flash messages
 }));

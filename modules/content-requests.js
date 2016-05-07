@@ -49,7 +49,7 @@ module.exports = {
 
                     // on last iteration, print how many documents were stored
                     if (index == data.length -1) {
-                        console.log('%d content suggestions successfully stored.', counter);
+                        //console.log('%d content suggestions successfully stored.', counter);
                     }
                 });
             });
