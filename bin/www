@@ -91,10 +91,12 @@ function onListening() {
 
   // start collecting content suggestions (performed every day at midnight)
   var job = new CronJob(
-      '*/10 * * * * *',
+      '0 0 */1 * * *',
       contentRequests.populateNewContent,
       null,
       true, /* Start the job right now */
-      'America/Los_Angeles' /* Time zone of this job. */
+      'America/Los_Angeles', /* Time zone of this job. */
+      null,
+      true
   );
 }

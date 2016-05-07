@@ -21,6 +21,8 @@ var requestNewContent = function(searchQuery) {
             else {
                 reject(Error("requestNewContent failed."));
             }
+        }, function(reason) {
+            console.log(reason);
         });
     });
 };
@@ -53,6 +55,8 @@ module.exports = {
                     }
                 });
             });
+        }, function(reason) {
+            console.log(reason);
         });
     }
 };
