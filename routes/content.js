@@ -40,7 +40,7 @@ router.get('/decision', function(req, res, next) {
 
             var bestContent = FindBestVideo(content, userContent[0].tagpool);
             //console.log(bestContent);
-            res.send(bestContent);
+            res.send({ contentArr: bestContent });
         });
     });
 
