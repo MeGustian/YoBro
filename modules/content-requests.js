@@ -10,9 +10,9 @@ var youtube = require('./youtube');
 var requestNewContent = function(searchQuery) {
     return new Promise(function(resolve, reject) {
         var youtubeContent = youtube.search(searchQuery);
-        var hackernewsContent = hackernews.search(searchQuery);
+        //var hackernewsContent = hackernews.search(searchQuery);
 
-        Promise.all([youtubeContent, hackernewsContent]).then(function(dataArr) {
+        Promise.all([youtubeContent]).then(function(dataArr) {
             var content = _.flatten(dataArr);
 
             if (content.length > 0) {

@@ -1,6 +1,6 @@
 var _ = require('underscore');
 var Provider = require('../models/providers');
-var meaningCloud = require('./meaningcloud');
+var htmlParsing = require('./html-parsing');
 var hn = require('hacker-news-api');
 
 // returns an object compatible with ContentSuggenstion model
@@ -20,15 +20,15 @@ module.exports = {
 
     search: function(query) {
         return new Promise(function(resolve, reject) {
-            hn.story().search(query).hitsPerPage(15).since('past_24h', function (error, data) {
+            hn.story().search(query).since('past_24h', function (error, data) {
                 if (error) reject(error);
                 else {
                     var promises = [];
-                    if (typeof data != 'object' || data.length == 0)
-                        reject();
+                    if (typeof data.hits != 'object' || data.hits.length == 0)
+                        reject("no values returned from hackernews");
                     else {
                         data.hits.forEach(function (entry, index) {
-                            var promise = meaningCloud.getTextData(entry.url);
+                            var promise = htmlParsing.getInfo(entry.url);
                             promises.push(promise);
 
                             if (index == data.hits.length - 1) {
@@ -39,26 +39,32 @@ module.exports = {
                                         var result = [];
                                         dataArr.forEach(function (data, dataIndex) {
                                             var suggestion = convertToContentSuggestion(entry[dataIndex], query);
-                                            suggestion.duration = 20;
+                                            suggestion.duration = data.duration;
                                             var tags = [];
+                                            var finish = data.tags.length == 0;
 
-                                            data.forEach(function (categories, index) {
+                                            data.tags.forEach(function (categories, index) {
                                                 if (categories.hasOwnProperty('category_list')) {
                                                     tags.push(categories.category_list.map(function (category) {
                                                         return category.label;
                                                     }));
                                                 }
 
-                                                if (dataIndex == dataArr.length - 1 && index == data.length - 1) {
+                                                if (index == data.tags.length - 1) {
                                                     suggestion.tags = _.flatten(tags);
                                                     result.push(suggestion);
-                                                    resolve(result);
+                                                    finish = true;
                                                 }
                                             });
+
+                                            if (dataIndex == dataArr.length - 1 && finish) {
+                                                resolve(result);
+                                            }
                                         });
                                     }
                                 }, function(reason) {
                                     console.log(reason);
+                                    reject();
                                 });
                             }
                         });
