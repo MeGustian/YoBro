@@ -34,11 +34,13 @@ router.get('/decision', function(req, res, next) {
             if (err) console.log('error finding user content');
             else userContent = data;
             foundUserContent = true;
-            res.render('some_content', { contentSuggestions: userContent });
+            //res.render('some_content', { contentSuggestions: userContent });
 
-            console.log(userContent[0].tagpool);
+            //console.log(userContent[0].tagpool);
 
-            FindBestVideo(content[0], userContent[0].tagpool);
+            var bestContent = FindBestVideo(content, userContent[0].tagpool);
+            //console.log(bestContent);
+            res.send(bestContent);
         });
     });
 
@@ -58,13 +60,15 @@ function FindBestVideo(content, tagpool) {
     var counter = 0;
     var minScore = 100000;
     var minScoreIndex = 0;
-    for (c in content) {
-        var currScore;
-        for (t in c.tags) {
-            currScore += Number(tagpool[t]);
+    var currScore = 0;
+    var c, t, i;
+    for (c = 0; c < content.length; c++) {
+        var currTags = content[c]._doc.tags;
+        for (t= 0; t < currTags.length; t++) {
+            currScore += Number(tagpool[currTags[t]]);
         }
-        if (counter < 5) {
-            bestFiveContents[counter] = c;
+        if (counter < 4) {
+            bestFiveContents[counter] = content[c]._doc;
             bestFiveScores[counter] = currScore;
             if (currScore < minScore) {
                 minScore = currScore;
@@ -73,10 +77,10 @@ function FindBestVideo(content, tagpool) {
             counter++;
         } else {
             if (currScore > minScore) {
-                bestFiveContents[minScoreIndex] = c;
+                bestFiveContents[minScoreIndex] = content[c]._doc;
                 bestFiveScores[minScoreIndex] = currScore;
                 minScore = 100000;
-                for (int = 0; i < 5; i++) {
+                for (i = 0; i < 5; i++) {
                     if (bestFiveScores[i] < minScore) {
                         minScore = bestFiveScores[i];
                         minScoreIndex = i;
